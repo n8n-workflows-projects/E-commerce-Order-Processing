@@ -181,8 +181,8 @@ After building this workflow, you'll learn how to:
 ![image alt](https://github.com/n8n-workflows-projects/E-commerce-Order-Processing/blob/d5fdcb6dd5f5a4ea4703421b9854cdd82a987941/Screenshot%202026-07-08%20112453.png)
 
 ## workflow output
+![image alt](https://github.com/n8n-workflows-projects/E-commerce-Order-Processing/blob/4bcdb0665f49e76b00830b1a3eebe1fcd7703fc3/Screenshot%202026-07-08%20113030.png)
 
-![image alt]()
 ---
 
 ## 📂 Project Structure
