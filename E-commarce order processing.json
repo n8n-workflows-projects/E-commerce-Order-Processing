@@ -1,0 +1,300 @@
+{
+  "name": "E-commarce order processing",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BGPTN2BG8",
+          "mode": "list",
+          "cachedResultName": "new-channel"
+        },
+        "text": "=order id: {{ $json['Order ID'] }}\ncustomer name: {{ $json['Customer Name'] }}\nproduct: {{ $json.Product }}\nquantity: {{ $json.Quantity }}\ncatogary: {{ $json.Category }}\norderd amount: {{ $json['Order Amount'] }}\npayment method: {{ $json['Payment Method'] }}\ncity: \norderd date:{{ $json['Order Date'] }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        672,
+        -288
+      ],
+      "id": "e10cbc22-e88e-43eb-970f-7921a4310438",
+      "name": "Send a message",
+      "webhookId": "5f4aace2-928f-48f7-b0c8-198844c1a9be",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "MRA7a5QtFGpsFKUo",
+          "name": "Slack OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o",
+          "mode": "list",
+          "cachedResultName": "E-commarce order processing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "total orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -96
+      ],
+      "id": "51bd6cda-2c6c-49de-aa5a-b8f729bc3a33",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "BSEfKRaKx8pSsnIU",
+          "name": "Google Sheets Trigger OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "Order ID"
+            },
+            {
+              "aggregation": "sum",
+              "field": "Order Amount"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        -96
+      ],
+      "id": "6123f5d0-a922-4fa2-98fa-a2f9155ab3c5",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "26f3134d-e5ea-4200-84e9-bbd722b5101e",
+              "leftValue": "={{ $json['Order Amount'] }}",
+              "rightValue": 10000,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        -96
+      ],
+      "id": "d4bc9352-0cc0-4969-be6b-49489a24e4f3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o",
+          "mode": "list",
+          "cachedResultName": "E-commarce order processing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 503331933,
+          "mode": "list",
+          "cachedResultName": "premium orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o/edit#gid=503331933"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        -192
+      ],
+      "id": "4cde9318-a3f7-4a00-be64-aa86e6a2f65b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "61zA3OXvJaf1ZfLz",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o",
+          "mode": "list",
+          "cachedResultName": "E-commarce order processing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1520039976,
+          "mode": "list",
+          "cachedResultName": "normal",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UK5gI2vptOM9ZW9MM8wmzcMm9ce7GuRGvUejPMqiD9o/edit#gid=1520039976"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        96
+      ],
+      "id": "b4ce3a8b-0224-49f8-b240-4c4b9ea2e9f8",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "61zA3OXvJaf1ZfLz",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        96
+      ],
+      "id": "cf78fecc-9d3d-4f6b-af85-306bea5a26a7",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e2ea0c5b-dc54-480f-9980-64796217d0fe",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "305c94ba9eec1593f65ff3c440db4af4c7f73fac57726d95ca30180013ee2b57"
+  },
+  "nodeGroups": [],
+  "id": "5nFfSyll0v2noJ3o",
+  "tags": []
+}
