@@ -175,14 +175,14 @@ After building this workflow, you'll learn how to:
 
 ## 📸 Workflow Screenshot
 
-Add your workflow screenshot here.
 
-Example
+## workflow design
 
-```
-images/ecommerce-order-processing.png
-```
+![image alt](https://github.com/n8n-workflows-projects/E-commerce-Order-Processing/blob/d5fdcb6dd5f5a4ea4703421b9854cdd82a987941/Screenshot%202026-07-08%20112453.png)
 
+## workflow output
+
+![image alt]()
 ---
 
 ## 📂 Project Structure
